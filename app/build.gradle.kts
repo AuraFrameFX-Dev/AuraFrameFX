@@ -13,7 +13,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
-    id("com.google.devtools.ksp") version "1.9.22-1.0.20"
+    id("com.google.devtools.ksp") version "1.9.22-1.0.19"
 }
 
 // Configure KSP
