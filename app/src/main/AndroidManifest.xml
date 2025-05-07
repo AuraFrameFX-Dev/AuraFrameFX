@@ -3,30 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dev.aurakai.auraframefx">
 
-    <!-- Required Permissions -->
+    <!-- Storage Permissions (Scoped storage makes these less needed for general app data) -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+
+    <!-- Media Permissions (Android 13+) -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Foreground Service Base Permission -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    
-    <!-- Overlay and System Alert Window Permissions -->
+
+    <!-- Overlay Window Permission -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    
+
+    <!-- Special permissions for foreground services that need to start from background -->
+    <uses-permission 
+        android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_OPERATIONS" 
+        tools:ignore="ProtectedPermissions" />
+
     <!-- Post Notifications Permission (Android 13+) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     
-    <!-- Battery Optimization Exemption -->
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    
-    <!-- For overlay on lock screen -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- Wake Lock (If your service needs to keep the CPU awake for short periods) -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -37,9 +40,9 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Material3.DayNight.NoActionBar"
+        android:theme="@style/Theme.AuraFrameFX"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="34">
 
         <!-- Xposed Module Metadata -->
         <meta-data
@@ -67,13 +70,21 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
+
         <!-- Kai Overlay Service -->
         <service
             android:name=".service.KaiOverlayService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="systemAlert" />
+            android:foregroundServiceType="specialUse">
+            <!-- 
+                Special use case declaration for Android 14+
+                This requires declaration in Play Console
+            -->
+            <property 
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Persistent system overlay for Kai's interactive assistant" />
+        </service>
 
         <!-- Xhancement Preferences Provider -->
         <provider
