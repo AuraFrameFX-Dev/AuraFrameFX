@@ -3,6 +3,16 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        // Add Maven repository for KSP
+        maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev") }
+    }
+    
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.namespace == "com.google.devtools.ksp") {
+                useModule("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:${requested.version}")
+            }
+        }
     }
 }
 
