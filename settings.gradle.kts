@@ -3,14 +3,17 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        // Add Maven repository for KSP
+        // Add Maven repository for KSP 2.x
+        maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/bootstrap/") }
         maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev") }
+        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/kotlinx-coroutines/maven") }
+        maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
     }
     
     resolutionStrategy {
         eachPlugin {
-            if (requested.id.namespace == "com.google.devtools.ksp") {
-                useModule("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:${requested.version}")
+            when (requested.id.namespace) {
+                "com.google.devtools.ksp" -> useModule("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:${requested.version}")
             }
         }
     }
