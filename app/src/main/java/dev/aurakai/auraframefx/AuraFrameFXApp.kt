@@ -56,7 +56,7 @@ class AuraFrameFXApp : Application() {
     
     private fun migrateLegacyPreferences() {
         try {
-            val prefs = getSharedPreferences("${packageName}_preferences", Context.MODE_PRIVATE)
+            val prefs = getSharedPreferences("${packageName}_preferences", MODE_PRIVATE)
             if (!prefs.getBoolean(PREFS_LEGACY_MIGRATED, false)) {
                 XhancementPrefs.migrateLegacyPreferences(this)
                 prefs.edit().putBoolean(PREFS_LEGACY_MIGRATED, true).apply()

@@ -127,11 +127,11 @@ class SystemStatsMonitor(private val context: Context) {
             )
             
             batteryStatus?.let {
-                val level = it.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1)
-                val scale = it.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1)
+                val level = it.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+                val scale = it.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
                 val batteryPct = (level * 100 / scale.toFloat()).toInt()
                 
-                val status = it.getIntExtra(android.os.BatteryManager.EXTRA_STATUS, -1)
+                val status = it.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
                 val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                         status == BatteryManager.BATTERY_STATUS_FULL
                 

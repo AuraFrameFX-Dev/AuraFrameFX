@@ -13,7 +13,18 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
-    id("com.google.devtools.ksp")
+    id("com.google.devtools.ksp") version "1.9.22-1.0.16"
+}
+
+// Configure KSP
+androidComponents {
+    onVariants { variant ->
+        kotlin {
+            sourceSets.named(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
 }
 
 android {
@@ -81,16 +92,29 @@ android {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // Enable incremental compilation
+        isIncremental = true
+        // Enable Java 8+ API desugaring support
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
         jvmTarget = "17"
+        // Enable Java 8+ API desugaring support
+        freeCompilerArgs = freeCompilerArgs + "-Xjvm-default=all"
     }
 
     buildFeatures {
         viewBinding = true
         buildConfig = true
         compose = true
+        // Enable build config generation for all variants
+        buildConfig = true
+    }
+    
+    // Enable build config generation for all variants
+    buildTypes.all {
+        buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
     }
 
     composeOptions {
@@ -99,8 +123,20 @@ android {
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            // Exclude all files that aren't needed in the final APK
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1}",
+                "/META-INF/LICENSE*",
+                "/META-INF/NOTICE*",
+                "/META-INF/versions/9/previous-compilation-data.bin",
+                "META-INF/*.version",
+                "META-INF/*.kotlin_module"
+            )
         }
+        
+        // Enable resource shrinking and code minification
+        isShrinkResources = true
+        isMinifyEnabled = true
     }
 }
 
@@ -112,7 +148,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
 
     // Core Android & UI
-    implementation("androidx.core:core-ktx:1.16.0")
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     
@@ -122,6 +158,7 @@ dependencies {
     // For system services and overlay
     implementation("androidx.lifecycle:lifecycle-service:2.8.7")
     implementation("androidx.lifecycle:lifecycle-process:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.8.7")
 
     // Compose
     implementation(platform("androidx.compose:compose-bom:2025.04.01"))
@@ -132,13 +169,14 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
     implementation("androidx.activity:activity-ktx:1.10.1")
 
     // Firebase Services (using BoM for version management)
-    implementation("com.google.firebase:firebase-analytics-ktx:22.4.0")
-    implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
-    implementation("com.google.firebase:firebase-auth-ktx:23.2.0")
-    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     // Google's Generative AI SDK (Gemini)
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
@@ -150,21 +188,24 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.google.code.gson:gson:2.13.1")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
 
     // Room
     val roomVersion = "2.7.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-paging:$roomVersion")
     
     // Kotlin coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
@@ -181,7 +222,7 @@ dependencies {
     implementation("com.jaredrummler:android-processes:1.1.1")
     
     // For battery optimization
-    implementation("com.jakewharton:process-phoenix:2.2.0")
+    implementation("com.jakewharton:process-phoenix:3.0.0")
     
     // Testing
     testImplementation("junit:junit:4.13.2")
@@ -189,5 +230,14 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     
     // For debugging
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:3.0")
+    
+    // For testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2025.04.01"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manager")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

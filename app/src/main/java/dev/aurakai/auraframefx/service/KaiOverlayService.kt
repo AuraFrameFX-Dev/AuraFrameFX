@@ -67,7 +67,7 @@ class KaiOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         }
         
         fun isRunning(context: Context): Boolean {
-            val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val activityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
             @Suppress("DEPRECATION") // getRunningServices is deprecated but still needed for our use case
             return activityManager.getRunningServices(Integer.MAX_VALUE).any {
                 it.service.className == KaiOverlayService::class.name
@@ -157,7 +157,7 @@ class KaiOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
         viewModel = ViewModelProvider(this, viewModelFactory)[KaiViewModel::class.java]
         
         // Initialize wake lock
-        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
         wakeLock = powerManager.newWakeLock(
             PowerManager.PARTIAL_WAKE_LOCK,
             "AuraFrameFX::KaiOverlayWakeLock"
@@ -273,7 +273,7 @@ class KaiOverlayService : Service(), LifecycleOwner, SavedStateRegistryOwner {
             return
         }
 
-        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         // Create and add the overlay view
         composeView = ComposeView(this).apply {

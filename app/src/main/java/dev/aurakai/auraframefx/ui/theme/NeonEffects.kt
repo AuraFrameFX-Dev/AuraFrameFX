@@ -120,7 +120,7 @@ fun AdvancedGlowingIcon(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .drawWithCache {
-                val paint = Paint().asFrameworkPaint()
+                Paint().asFrameworkPaint()
                 val glowPaint = Paint().asFrameworkPaint().apply {
                     color = glowColor.copy(alpha = glowIntensity).toArgb()
                     isAntiAlias = true
@@ -212,7 +212,7 @@ fun FloatingGlowingIcon(
     glowColor: Color = Color.Cyan,
     onDismissRequest: () -> Unit = {}
 ) {
-    val density = LocalDensity.current
+    LocalDensity.current
     
     Popup(
         onDismissRequest = onDismissRequest,
@@ -304,14 +304,14 @@ fun GlowingIcon(
     glowRadius: Dp = 8.dp,
     glowIntensity: Float = 0.7f,
 ) {
-    val glowRadiusPx = glowRadius.toPx()
+    glowRadius.toPx()
     
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
     ) {
         // Glow layer (behind)
-        androidx.compose.material3.Icon(
+        Icon(
             painter = painterResource(id = iconResId),
             contentDescription = null, // Not read by screen readers
             tint = glowColor,
@@ -326,7 +326,7 @@ fun GlowingIcon(
         )
         
         // Main icon (on top)
-        androidx.compose.material3.Icon(
+        Icon(
             painter = painterResource(id = iconResId),
             contentDescription = contentDescription,
             tint = tint,
@@ -353,13 +353,13 @@ fun AdvancedGlowingIcon(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .drawWithCache {
-                val paint = Paint().asFrameworkPaint()
+                Paint().asFrameworkPaint()
                 val glowPaint = Paint().asFrameworkPaint().apply {
                     color = glowColor.copy(alpha = glowIntensity).toArgb()
                     isAntiAlias = true
-                    maskFilter = android.graphics.BlurMaskFilter(
+                    maskFilter = BlurMaskFilter(
                         glowRadius.toPx(),
-                        android.graphics.BlurMaskFilter.Blur.NORMAL
+                        BlurMaskFilter.Blur.NORMAL
                     )
                 }
                 
@@ -381,7 +381,7 @@ fun AdvancedGlowingIcon(
                 }
             }
     ) {
-        androidx.compose.material3.Icon(
+        Icon(
             painter = painterResource(id = iconResId),
             contentDescription = contentDescription,
             tint = tint,

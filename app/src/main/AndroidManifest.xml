@@ -81,8 +81,8 @@
                 Special use case declaration for Android 14+
                 This requires declaration in Play Console
             -->
-            <property 
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+            <meta-data
+                android:name="android.app.property.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Persistent system overlay for Kai's interactive assistant" />
         </service>
 
