@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="error_color">#FF5252</color>
+    
+    <!-- Kai Toolbox Colors -->
+    <color name="neon_magenta">#FF00FF</color>
+    <color name="neon_magenta_glow">#FF00FF80</color>
+    <color name="neon_teal">#00FFCC</color>
+    <color name="neon_teal_glow">#00FFCC80</color>
+    <color name="neon_purple">#CC00FF</color>
+    <color name="neon_purple_glow">#CC00FF80</color>
+</resources>

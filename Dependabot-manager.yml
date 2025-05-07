@@ -1,0 +1,57 @@
+name: Dependabot Automation
+on:
+  pull_request_target:
+    types: [ opened, reopened, synchronize ]
+  issue_comment:
+    types: [ created ]
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+jobs:
+  triage:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Metadata extraction
+        uses: dependabot/fetch-metadata@v2
+        id: meta
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Security labeling
+        if: steps.meta.outputs.update-type == 'security'
+        run: gh pr edit $PR_URL --add-label "security 🔒"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+      - name: Major version flag
+        if: steps.meta.outputs.update-type == 'version-update:semver-major'
+        run: gh pr edit $PR_URL --add-label "major-release ⚠️"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+  quality-gate:
+    needs: triage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Gradle validation
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: check --no-daemon
+      - name: APK size check
+        uses: project-chip/gh-action-apk-size@v1
+        with:
+          apk-path: app/build/outputs/apk/release/app-release.apk
+          max-size-mb: 25
+  auto-merge:
+    needs: quality-gate
+    if: success() && !contains(github.event.pull_request.labels.*.name, 'major-release ⚠️' )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable auto-merge
+        run: |
+          gh pr merge --auto --squash $PR_URL
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

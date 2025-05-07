@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">AuraFrameFX</string>
+    
+    <!-- Kai Status Messages -->
+    <string name="kai_status_monitoring">Kai is monitoring your system</string>
+    <string name="kai_status_disabled">Kai is disabled</string>
+    <string name="kai_status_idle">Kai is idle</string>
+    <string name="kai_status_system_secure">System secure</string>
+    <string name="kai_status_threat_detected">Threat detected!</string>
+    <string name="kai_status_optimization_active">Optimization active</string>
+    <string name="kai_status_information">Information</string>
+    
+    <!-- Kai Toolbox -->
+    <string name="kai_toolbox_title">Kai\'s Toolbox</string>
+    <string name="kai_toolbox_back">Back</string>
+    <string name="kai_toolbox_status">Kai\'s Status</string>
+    <string name="kai_toolbox_status_description">Kai is currently active and monitoring your system</string>
+    <string name="kai_toolbox_controls">Controls</string>
+    <string name="kai_toolbox_show_toolbox">Show Kai\'s Toolbox</string>
+    <string name="kai_toolbox_system_stats">System Stats</string>
+    
+    <!-- System Stats -->
+    <string name="system_stats_cpu">CPU Usage</string>
+    <string name="system_stats_ram">RAM Usage</string>
+    <string name="system_stats_battery">Battery</string>
+    <string name="system_stats_status">Status</string>
+    <string name="system_stats_charging">Charging</string>
+    <string name="system_stats_on_battery">On Battery</string>
+    
+    <!-- Permissions -->
+    <string name="permission_overlay_required">Overlay permission is required for Kai to function properly</string>
+    <string name="permission_grant">Grant Permission</string>
+    <string name="grant_overlay_permission">Grant Overlay Permission</string>
+    <string name="overlay_permission_required">Overlay permission is required to display Kai on top of other apps</string>
+    <string name="overlay_control">Overlay Control</string>
+    <string name="start_overlay">Start Overlay</string>
+    <string name="stop_overlay">Stop Overlay</string>
+    <string name="overlay_permission_granted">Overlay permission granted</string>
+    <string name="overlay_permission_denied">Overlay permission denied</string>
+    <string name="overlay_starting">Starting Kai Overlay…</string>
+    <string name="overlay_stopping">Stopping Kai Overlay…</string>
+</resources>
